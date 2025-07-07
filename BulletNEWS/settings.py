@@ -12,7 +12,7 @@ load_dotenv(env_path)
 # Secret settings
 SECRET_KEY = os.getenv('DJANGO_SECRET_KEY')
 DEBUG = os.getenv('DEBUG', 'False') == 'True'
-ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', 'localhost 127.0.0.1').split()
+ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', 'bulletnews-onl9.onrender.com').split()
 
 # External API Keys
 GEMINI_API_KEY = os.getenv('GEMINI_API_KEY')
