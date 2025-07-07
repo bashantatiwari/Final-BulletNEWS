@@ -1,0 +1,208 @@
+{% extends 'base.html' %}
+{% load newsfeed_extras %}
+{% load static %}
+
+{% block title %}
+  My Feed - BulletNEWS
+{% endblock %}
+
+{% block extra_css %}
+  <style>
+    .feed-container {
+      max-width: 1600px;
+      margin: 0 auto;
+      padding: 2rem;
+      background: #f8f9fa;
+      min-height: calc(100vh - 200px);
+    }
+    
+    .category-card {
+      background: white;
+      border-radius: 10px;
+      padding: 1.5rem;
+      margin-bottom: 2rem;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    }
+    
+    .category-header {
+      margin-bottom: 1rem;
+    }
+    
+    .category-title {
+      font-size: 1.5rem;
+      color: #2c3e50;
+      margin: 0;
+    }
+    
+    .preview-options {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 1rem;
+    }
+    
+    .preview-option {
+      padding: 0.5rem 1rem;
+      border: none;
+      border-radius: 5px;
+      background: #f8f9fa;
+      color: #2c3e50;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    
+    .preview-option:hover {
+      background: #e9ecef;
+    }
+    
+    .preview-option i {
+      font-size: 1.1rem;
+    }
+    
+    .article-list {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+    
+    .article-item {
+      padding: 1rem;
+      background: #f8f9fa;
+      border-radius: 5px;
+      transition: all 0.3s ease;
+    }
+    
+    .article-item:hover {
+      background: #e9ecef;
+    }
+    
+    .article-title {
+      font-weight: 600;
+      color: #2c3e50;
+      margin-bottom: 0.5rem;
+    }
+    
+    .article-summary {
+      color: #6c757d;
+      font-size: 0.9rem;
+    }
+    
+    @media (max-width: 768px) {
+      .feed-container {
+        padding: 1rem;
+      }
+    
+      .preview-options {
+        flex-direction: column;
+      }
+    }
+  </style>
+{% endblock %}
+
+{% block content %}
+  <div class="feed-container">
+    <div class="feed-header">
+      <h1 class="feed-title">
+        <i class="fas fa-newspaper"></i>
+        My Feed
+      </h1>
+    </div>
+
+    {% if categories %}
+      {% for category in categories %}
+        <div class="category-card" id="category-{{ category }}">
+          <div class="category-header">
+            <h2 class="category-title">
+              <i class="fas fa-folder"></i>
+              {{ category|title }}
+            </h2>
+          </div>
+
+          <div class="preview-options">
+            <button class="preview-option" onclick="showPreview('{{ category }}', 'pdf')">
+              <i class="fas fa-file-pdf"></i>
+              <span>Read PDF</span>
+            </button>
+            <a href="{% url 'newsfeed:audio_player' category %}" class="preview-option">
+              <i class="fas fa-headphones"></i>
+              <span>Listen to News</span>
+            </a>
+          </div>
+
+          <div class="article-list">
+            {% for article in summaries|get_item:category %}
+              <div class="article-item">
+                <div class="article-title">
+                  <i class="fas fa-angle-right"></i>
+                  {{ article.title }}
+                </div>
+                <div class="article-summary">{{ article.summary }}</div>
+              </div>
+            {% endfor %}
+          </div>
+        </div>
+      {% endfor %}
+    {% else %}
+      <div class="empty-state">
+        <div class="empty-state-icon">
+          <i class="fas fa-newspaper"></i>
+        </div>
+        <p class="empty-state-text">No news categories available at the moment.</p>
+      </div>
+    {% endif %}
+  </div>
+{% endblock %}
+
+{% block extra_js %}
+  <script>
+    function showPreview(category, type) {
+      if (type === 'pdf') {
+        generatePDF(category)
+      }
+    }
+    
+    function generatePDF(category) {
+      const csrfToken = getCSRFToken()
+    
+      fetch('/newsfeed/generate-pdf/', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+          'X-CSRFToken': csrfToken
+        },
+        body: new URLSearchParams({
+          category: category
+        })
+      })
+        .then(async (response) => {
+          const contentType = response.headers.get('content-type')
+    
+          if (contentType && contentType.includes('application/json')) {
+            const data = await response.json()
+    
+            if (data.file_url) {
+              window.open(data.file_url, '_blank')
+            } else {
+              alert(data.error || 'PDF generation failed.')
+            }
+          } else {
+            const text = await response.text() // Get raw HTML or error
+            console.error('Non-JSON response:', text)
+            alert('Something went wrong. Check console for error details.')
+          }
+        })
+        .catch((error) => {
+          console.error('Fetch Error:', error)
+          alert('An error occurred. Check the console for details.')
+        })
+    }
+    
+    function getCSRFToken() {
+      const name = 'csrftoken'
+      const cookieValue = document.cookie.split('; ').find((row) => row.startsWith(name + '='))
+      return cookieValue ? decodeURIComponent(cookieValue.split('=')[1]) : ''
+    }
+  </script>
+{% endblock %}

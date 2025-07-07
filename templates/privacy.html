@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+
+{% block title %}Privacy Policy - BulletNEWS{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <h1 class="display-4 mb-4">Privacy Policy</h1>
+            <p class="lead mb-4">Last updated: {% now "F d, Y" %}</p>
+            
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h2 class="h4 mb-3">Information We Collect</h2>
+                    <p>We collect information that you provide directly to us, including:</p>
+                    <ul>
+                        <li>Account information (name, email address)</li>
+                        <li>Profile information</li>
+                        <li>User preferences and settings</li>
+                        <li>Communication preferences</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h2 class="h4 mb-3">How We Use Your Information</h2>
+                    <p>We use the information we collect to:</p>
+                    <ul>
+                        <li>Provide and maintain our services</li>
+                        <li>Personalize your experience</li>
+                        <li>Send you updates and notifications</li>
+                        <li>Improve our services</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h2 class="h4 mb-3">Data Security</h2>
+                    <p>
+                        We implement appropriate security measures to protect your personal 
+                        information. However, no method of transmission over the Internet 
+                        is 100% secure, and we cannot guarantee absolute security.
+                    </p>
+                </div>
+            </div>
+
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h2 class="h4 mb-3">Contact Us</h2>
+                    <p>
+                        If you have any questions about this Privacy Policy, please contact us at:
+                        <br>
+                        <a href="mailto:privacy@bulletnews.com">privacy@bulletnews.com</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

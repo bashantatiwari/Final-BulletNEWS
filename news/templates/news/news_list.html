@@ -1,0 +1,280 @@
+{% extends 'base.html' %} {% load static %} {% load custom_tags %} {% block title %}
+  BulletNews | News
+{% endblock %} {% block extra_css %}
+  <link rel="stylesheet" href="{% static 'news/css/style.css' %}" />
+  <link rel="stylesheet" href="{% static 'news/css/newCss.css' %}" />
+
+  <style>
+    .read-more-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: #000;
+      color: #ffffff !important;
+      padding: 8px 16px;
+      border-radius: 6px;
+      text-decoration: none;
+      font-weight: 500;
+      font-size: 0.9rem;
+      border: 1px solid #000;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      height: 36px;
+      white-space: nowrap;
+    }
+    
+    .read-more-link:hover {
+      background: #fff;
+      color: #000 !important;
+      text-decoration: none;
+    }
+    
+    .explain-ai-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: #000;
+      color: #ffffff !important;
+      padding: 6px 12px;
+      border-radius: 6px;
+      text-decoration: none;
+      font-size: 0.9rem;
+      border: 1px solid #000;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      margin-left: 10px;
+    }
+    
+    .explain-ai-btn:hover {
+      background: #fff;
+      color: #000 !important;
+      text-decoration: none;
+    }
+    
+    .explain-ai-btn i {
+      font-size: 0.9rem;
+    }
+    
+    .headline-footer {
+      display: flex;
+      align-items: center;
+      margin-top: 8px;
+    }
+    
+    /* Remove underlines from all news headlines */
+    .latest-headlines-list a,
+    .headlines-list a,
+    .category-container a {
+      text-decoration: none;
+      color: inherit;
+      display: block;
+    }
+    
+    .latest-headlines-list a:hover,
+    .headlines-list a:hover,
+    .category-container a:hover {
+      text-decoration: none;
+    }
+    
+    .headline-card {
+      transition: transform 0.2s ease;
+    }
+    
+    .headline-card:hover {
+      transform: translateY(-2px);
+    }
+    .featured-news {
+      background-color: var(--card-bg);
+      border-radius: var(--card-radius);
+      box-shadow: var(--box-shadow);
+      overflow: hidden;
+    }
+    
+    .featured-image {
+      width: 100%;
+      height: 250px;
+      overflow: hidden;
+    }
+    
+    .featured-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    
+    .featured-title {
+      padding: 1rem 1rem 0.5rem;
+      font-size: 1.3rem;
+      font-weight: 700;
+    }
+    
+    .featured-summary {
+      padding: 0 1rem 1rem;
+      color: var(--light-text);
+      font-size: 0.95rem;
+    }
+    @media (max-width: 768px) {
+      .explain-ai-btn {
+        width: 100%;
+      }
+    }
+  </style>
+{% endblock %} {% block content %}
+  <section class="latest-headlines-section">
+    <div class="container">
+      <h2 class="section-title">Latest Headlines</h2>
+      <div class="latest-container">
+        <!-- Headlines List (Left Column) -->
+        <div class="latest-headlines-list scrollable-content">
+          {% for article in latest_headlines %}
+            <a href="{% url 'news:news_detail' 'latest' forloop.counter0 %}">
+              <div class="headline-card">
+                <div class="headline-image">
+                  <img src="{{ article.image_url|default:'https://placehold.co/120x80?text=News' }}" alt="{{ article.title }}" />
+                </div>
+                <div class="headline-content">
+                  <div class="headline-details">
+                    <span class="headline-author">{{ article.author }}</span>
+                    <span>|</span>
+                    <span class="headline-date">{{ article.date }}</span>
+                  </div>
+                  <h3 class="headline-title">{{ article.title }}</h3>
+                  <div class="headline-footer">
+                    <span class="read-time">{{ article.read_time }}</span>
+                    {% if user.is_authenticated %}
+                      <button class="explain-ai-btn" onclick="explainNews(event, '{{ article.title }}', '{{ article.body|escapejs }}')"><i class="fas fa-robot"></i> Explain in Nepali</button>
+                    {% else %}
+                      <a href="{% url 'login' %}?next={{ next|default:'/' }}" class="explain-ai-btn"><i class="fas fa-robot"></i> Login to Explain</a>
+                    {% endif %}
+                  </div>
+                </div>
+              </div>
+            </a>
+          {% endfor %}
+        </div>
+
+        <!-- Advertisement Section (Right Column) -->
+        <div class="ads-container">
+          <div class="ad-card">
+            <img src="{% static 'news/images/sunway ad.jpg' %}" alt="Top Ad" />
+            <button class="action-btn"><a href="https://sunway.edu.np/">Lets Explore</a></button>
+          </div>
+          <div class="ad-card">
+            <img src="{% static 'news/images/SunwayAd.jpg' %}" alt="Bottom Ad" />
+            <button class="action-btn"><a href="https://sunway.edu.np/">Lets Explore</a></button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  {% for category in categories %}
+    <section class="category-feed-section">
+      <div class="container">
+        <h2 class="section-title">{{ category.name }}</h2>
+        <div class="category-container">
+          <!-- Headlines Section (Left) -->
+          <div class="headlines-container">
+            <div class="headlines-list scrollable-content">
+              {% with category_news=category_news_dict|get_item:category.name %}
+                {% if category_news %}
+                  {% for article in category_news %}
+                    <a href="{% url 'news:news_detail' category.name|slugify forloop.counter0 %}">
+                      <div class="headline-card" data-article-index="{{ forloop.counter0 }}" data-category="{{ category.name|lower|cut:' ' }}">
+                        <div class="headline-image">
+                          {% if article.image_url %}
+                            <img src="{{ article.image_url }}" alt="{{ article.title }}" />
+                          {% else %}
+                            <img src="https://placehold.co/120x80?text={{ category.name }}" alt="{{ article.title }}" />
+                          {% endif %}
+                        </div>
+                        <div class="headline-content">
+                          <div class="headline-details">
+                            <span class="headline-author">{{ article.author }}</span>
+                            <span>|</span>
+                            <span class="headline-date">{{ article.date }}</span>
+                          </div>
+                          <h3 class="headline-title">{{ article.title }}</h3>
+                          <div class="headline-footer">
+                            <span class="read-time">{{ article.read_time }}</span>
+                            {% if user.is_authenticated %}
+                              <button class="explain-ai-btn" onclick="explainNews(event, '{{ article.title }}', '{{ article.body|escapejs }}')"><i class="fas fa-robot"></i> Explain in Nepali</button>
+                            {% else %}
+                              <a href="{% url 'login' %}?next={{ next|default:'/' }}" class="explain-ai-btn"><i class="fas fa-robot"></i> Login to Explain</a>
+                            {% endif %}
+                          </div>
+                        </div>
+                      </div>
+                    </a>
+                  {% endfor %}
+                {% else %}
+                  <div class="headline-card">
+                    <h3 class="headline-title">No {{ category.name }} news available</h3>
+                  </div>
+                {% endif %}
+              {% endwith %}
+            </div>
+          </div>
+
+          <!-- Featured News (Right) -->
+          <div class="featured-container">
+            {% with featured=featured_news_dict|get_item:category.name %}
+              {% if featured %}
+                <div class="featured-news-card" id="featured-{{ category.name|lower|cut:' ' }}">
+                  <div class="featured-image">
+                    {% if featured.image_url %}
+                      <img src="{{ featured.image_url }}" alt="{{ featured.title }}" />
+                    {% else %}
+                      <img src="https://placehold.co/600x400?text={{ category.name }}" alt="{{ featured.title }}" />
+                    {% endif %}
+                  </div>
+                  <div class="featured-content">
+                    <div class="featured-details">
+                      <span class="featured-author">{{ featured.author }}</span>
+                      <span>|</span>
+                      <span class="featured-date">{{ featured.date }}</span>
+                    </div>
+                    <h3 class="featured-title">{{ featured.title }}</h3>
+                    <div class="featured-body">
+                      {% if featured.body %}
+                        <p>{{ featured.body|truncatewords:100 }}</p>
+                      {% endif %}
+                    </div>
+                    <div class="featured-footer">
+                      <span class="read-time">{{ featured.read_time }}</span>
+                      <a href="{% url 'news:news_detail' category.name|slugify 0 %}" class="read-more-link">Read More</a>
+                      {% if user.is_authenticated %}
+                        <button class="explain-ai-btn" onclick="explainNews(event, '{{ featured.title }}', '{{ featured.body|escapejs }}')"><i class="fas fa-robot"></i> Explain in Nepali</button>
+                      {% else %}
+                        <a href="{% url 'login' %}?next={{ next|default:'/' }}" class="explain-ai-btn"><i class="fas fa-robot"></i> Login to Explain</a>
+                      {% endif %}
+                    </div>
+                  </div>
+                </div>
+              {% else %}
+                <div class="featured-news-card empty-featured" id="featured-{{ category.name|lower|cut:' ' }}">
+                  <h3>No featured {{ category.name }} news</h3>
+                </div>
+              {% endif %}
+            {% endwith %}
+          </div>
+        </div>
+      </div>
+    </section>
+  {% endfor %}
+{% endblock %} {% block extra_js %}
+  <script>
+    async function explainNews(event, title, body) {
+      event.preventDefault()
+      event.stopPropagation()
+    
+      // Store the news data and loading state in localStorage
+      localStorage.setItem('currentNewsTitle', title)
+      localStorage.setItem('currentNewsBody', body)
+      localStorage.setItem('isGeneratingExplanation', 'true')
+    
+      // Redirect to the AI chat interface
+      window.location.href = '/ai_chat/chat/'
+    }
+  </script>
+{% endblock %}

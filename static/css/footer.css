@@ -1,0 +1,268 @@
+/* ===============================
+   Footer Base Styles
+================================= */
+.footer {
+  background-color: #fff;
+  padding: 2rem 0;
+  margin-top: 3rem;
+  border-top: 1px solid #eee;
+}
+
+.footerUniq_container {
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: 0 120px;
+}
+
+.footerUniq_wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.footerUniq_separator {
+  height: 1px;
+  background: #e0e0e0;
+  width: 100%;
+}
+
+.footerUniq_mainContent {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2rem;
+}
+
+/* Contact Section */
+.footerUniq_contactSection,
+.footerUniq_socialSection,
+.footerUniq_quickLinksSection {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.footerUniq_contactHeader {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.footerUniq_contactIcon {
+  width: 24px;
+  height: 24px;
+}
+
+.footerUniq_contactTitle {
+  font-size: 18px;
+  font-weight: 600;
+  color: #000;
+}
+
+.footerUniq_contactLinks {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+/* Contact Links */
+.footerUniq_writeBlogs,
+.footerUniq_advertise,
+.footerUniq_letsConnect {
+  font-size: 16px;
+  color: #000; /* Black links */
+  cursor: pointer;
+  transition: color 0.2s;
+}
+
+/* Social Section */
+.footerUniq_socialSection {
+  align-items: center;
+}
+
+.footerUniq_logo {
+  width: 120px;
+  height: auto;
+}
+
+.footerUniq_followText {
+  font-size: 18px;
+  font-weight: 600;
+  color: #000;
+}
+
+.footerUniq_socialIcons {
+  display: flex;
+  gap: 1rem;
+}
+
+.footerUniq_iconBox {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: #f5f5f5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.footerUniq_iconBox:hover {
+  background: #ddd; /* Gray hover background */
+  transform: translateY(-2px); /* Subtle lift */
+}
+
+/* Quick Links Section */
+.footerUniq_quickLinksTitle {
+  font-size: 18px;
+  font-weight: 600;
+  color: #000;
+}
+
+.footerUniq_quickLinks {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.footerUniq_linkNews,
+.footerUniq_linkBlogs,
+.footerUniq_linkAbout {
+  font-size: 16px;
+  color: #000; /* Black links */
+  cursor: pointer;
+  transition: color 0.2s;
+}
+
+/* Footer Legal Text */
+.footerUniq_footerText {
+  text-align: center;
+  padding-top: 2rem;
+  border-top: 1px solid #eee;
+}
+
+.footerUniq_footerLegal,
+.footerUniq_footerTerms {
+  font-size: 14px;
+  color: #000; /* Black text */
+}
+
+.footerUniq_footerTerms {
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+/* ===============================
+   Link & Icon Colors
+================================= */
+
+/* Make all links black and remove default blue */
+.footer a,
+.footerUniq_mainContent a {
+  color: #000;
+  text-decoration: none;
+}
+
+.footer a:hover,
+.footerUniq_mainContent a:hover,
+.footerUniq_writeBlogs:hover,
+.footerUniq_advertise:hover,
+.footerUniq_letsConnect:hover,
+.footerUniq_linkNews:hover,
+.footerUniq_linkBlogs:hover,
+.footerUniq_linkAbout:hover {
+  color: #333; /* Subtle gray on hover */
+}
+
+/* Make all icons black */
+.footerUniq_socialIcons i,
+.footerUniq_iconBox i,
+.footer a i,
+.footerUniq_mainContent a i {
+  color: #000 !important;
+}
+
+/* ===============================
+   Responsive Design
+================================= */
+
+/* Medium screens: adjust padding */
+@media (max-width: 1200px) {
+  .footerUniq_container {
+    padding: 0 60px;
+  }
+}
+
+/* Mobile layout: stack and center sections */
+@media (max-width: 768px) {
+  .footerUniq_container {
+    padding: 0 30px;
+  }
+
+  .footerUniq_mainContent {
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Center sections horizontally */
+    text-align: center; /* Center text inside sections */
+    gap: 2rem;
+  }
+
+  .footerUniq_contactSection,
+  .footerUniq_socialSection,
+  .footerUniq_quickLinksSection {
+    width: 100%;
+    max-width: 400px; /* Constrain for better mobile appearance */
+  }
+
+  .footerUniq_contactSection {
+    order: 1; /* Contact first */
+  }
+
+  .footerUniq_socialSection {
+    order: 2; /* Social second */
+  }
+
+  .footerUniq_quickLinksSection {
+    order: 3; /* Quick links last */
+    text-align: center;
+  }
+
+  .footerUniq_quickLinksSection ul {
+    align-items: center; /* Center quick links list */
+  }
+
+  .footerUniq_quickLinksSection li {
+    justify-content: center !important; /* Center each quick link */
+  }
+
+  .footer-copyright .row {
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .footer-copyright .col-md-6 {
+    text-align: center !important;
+  }
+}
+
+/* Extra small screens: tighter paddings and smaller fonts */
+@media (max-width: 480px) {
+  .footerUniq_container {
+    padding: 0 15px;
+  }
+
+  .footerUniq_contactTitle,
+  .footerUniq_followText,
+  .footerUniq_quickLinksTitle {
+    font-size: 16px;
+  }
+
+  .footerUniq_writeBlogs,
+  .footerUniq_advertise,
+  .footerUniq_letsConnect,
+  .footerUniq_linkNews,
+  .footerUniq_linkBlogs,
+  .footerUniq_linkAbout {
+    font-size: 14px;
+  }
+}

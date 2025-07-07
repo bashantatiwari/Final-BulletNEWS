@@ -1,0 +1,133 @@
+/* Apply a clean font */
+body {
+  font-family: 'Inter', sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #ffffff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.mainbar {
+  background-color: #f5f5f5;
+  padding: 40px 30px;
+  width: 400px;
+
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* Label styling */
+.heading-third {
+  font-weight: 600;
+  font-size: 14px;
+  margin-bottom: 6px;
+  display: block;
+}
+
+/* Input group */
+.user-input {
+  display: flex;
+  align-items: center;
+  border: 1px solid #ccc;
+  border-radius: 25px;
+  padding: 10px 15px;
+  background-color: #fff;
+}
+
+.user-input i {
+  margin-right: 10px;
+  color: #666;
+}
+
+.user-input input {
+  border: none;
+  outline: none;
+  font-size: 14px;
+  width: 100%;
+  background: transparent;
+}
+
+/* Remember me & Forgot Password */
+.form-third-part {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 14px;
+}
+
+/* Google login */
+.form-fourth-part-first-content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #ccc;
+  border-radius: 25px;
+  padding: 10px;
+  background-color: #f5f5f5;
+  margin-bottom: 20px;
+  cursor: pointer;
+  transition: background-color 0.2s ease-in-out;
+}
+
+.form-fourth-part-first-content:hover {
+  background-color: #ebebeb;
+}
+
+.form-fourth-part-first-content img {
+  width: 20px;
+  height: 20px;
+}
+
+.form-fourth-part-first-content h3 {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.form-fourth-part-first-content a {
+  text-decoration: none;
+  color: #333;
+}
+
+/* Submit button */
+.login-form-btn {
+  width: 100%;
+  padding: 12px;
+  border: none;
+  background-color: #000000;
+  color: white;
+  border-radius: 6px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.login-form-btn:hover {
+  background-color: white;
+  color: black;
+  border: 2px solid black;
+  transition: background-color 0.2s ease-in-out;
+}
+
+/* Signup redirect */
+.redirecting-to-signin-page h3 {
+  text-align: center;
+  font-size: 14px;
+}
+
+.redirecting-to-signin-page a {
+  color: black;
+  text-decoration: none;
+}
+
+.redirecting-to-signin-page a:hover {
+  text-decoration: underline;
+}

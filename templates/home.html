@@ -1,0 +1,855 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+  Home - BulletNEWS
+{% endblock %}
+
+{% block content %}
+  <div class="container">
+    {% if messages %}
+      <div class="messages">
+        {% for message in messages %}
+          <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+          </div>
+        {% endfor %}
+      </div>
+    {% endif %}
+
+    <section class="hero" style="background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);">
+      <!-- Left Audio Section -->
+      <div class="frame-27">
+        <div class="headlines-in-headphones-on">
+          Headlines In
+          <br />
+          Headphones On
+        </div>
+        <div class="listen-to-the-news-that-matters">Listen to the news that matters</div>
+        <div class="frame-26">
+          <div class="frame-25">
+            <img class="icons" src="{% static 'images/home/icons/icons0.svg' %}" />
+            <div class="lets-listen-news">Lets, Listen News</div>
+            <img class="icons2" src="{% static 'images/home/icons/icons1.svg' %}" />
+          </div>
+          <a href="{% url 'newsfeed:myfeed' %}"><img class="rectangle-7" src="{% static 'images/home/rectangle-70.png' %}" /></a>
+        </div>
+      </div>
+
+      <!-- Right News Slider -->
+      <div class="right-panel">
+        <iframe class="video-player" width="100%" height="100%" src="https://www.youtube.com/embed/DThIS86lGAU?autoplay=1&mute=1&loop=1&playlist=DThIS86lGAU&modestbranding=1" title="Bullet News Intro" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen style="background:#e0e0e0; border-radius:18px; aspect-ratio:16/9; object-fit:cover;"></iframe>
+      </div>
+    </section>
+
+    <!-- Popular Category Section -->
+    <div class="popular-category" style="margin: 60px auto;">
+      <div class="frame-36">
+        <div class="popular-category2">Popular Category</div>
+        <div class="frame-35">
+          <div class="category-box">
+            <img class="rectangle-8" src="{% static 'images/ImagesForDesign/PoliticsImage.avif' %}" />
+            <div class="category politics">
+              <a href="{% url 'news:news_list' %} ">Politics</a>
+            </div>
+          </div>
+          <div class="category-box">
+            <img class="rectangle-8" src="{% static 'images/ImagesForDesign/Technology.jpg' %}" />
+            <div class="category technology">
+              <a href="{% url 'news:news_list' %}">Technology</a>
+            </div>
+          </div>
+          <div class="category-box">
+            <img class="rectangle-8" src="{% static 'images/ImagesForDesign/health.jpg' %}" />
+            <div class="category health">
+              <a href="{% url 'news:news_list' %}">Health</a>
+            </div>
+          </div>
+          <div class="category-box">
+            <img class="rectangle-8" src="{% static 'images/ImagesForDesign/sports.jpg' %}" />
+            <div class="category sports">
+              <a href="{% url 'news:news_list' %}">Sports</a>
+            </div>
+          </div>
+          <div class="category-box">
+            <img class="rectangle-8" src="{% static 'images/ImagesForDesign/Climate.jpg' %}" />
+            <div class="category climate">
+              <a href="{% url 'news:news_list' %}">Climate</a>
+            </div>
+          </div>
+          <div class="category-box">
+            <img class="rectangle-8" src="{% static 'images/ImagesForDesign/finance.jpg' %}" />
+            <div class="category finance">
+              <a href="{% url 'news:news_list' %}">Finance</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Trending News Section -->
+    <section class="frame-49">
+      <div class="frame-37">
+        <div class="line-1"></div>
+        <div class="trending-news">Trending News</div>
+        <div class="line-2"></div>
+      </div>
+      <div class="frame-39">
+        {% for news in top_latest_news %}
+          <div class="card">
+            {% if news.image_url %}
+              <img src="{{ news.image_url }}" alt="{{ news.title }}" class="rectangle-9" />
+            {% else %}
+              <div class="rectangle-9"></div>
+            {% endif %}
+            <div class="source-april-07-2025">{{ news.author|default:'Kathmandu Post' }} | {{ news.published_date|default:'Unknown' }}</div>
+            <div class="headline-of-the-news" title="{{ news.title }}">{{ news.title }}</div>
+            <div class="frame-38">
+              <a href="{% url 'news:news_detail' 'latest' forloop.counter0 %}" style="text-decoration: none;" class="read-more">Read More</a>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+    </section>
+
+    <!-- Advertisement Section -->
+    <section class="ad-section" style="margin: 60px 0px;">
+      <div class="container">
+        <div class="ad-content">
+          <img src="{% static 'images/ad/SunwayCollege.png' %}" alt="Advertisement" />
+          <a href="https://sunway.edu.np/news/free-3-days-workshop-ai-for-starters/" class="btn">Learn More</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Trending Blogs Section -->
+    <section class="frame-49">
+      <div class="frame-37">
+        <div class="line-1"></div>
+        <div class="trending-news">Trending Blogs</div>
+        <div class="line-2"></div>
+      </div>
+      <div class="frame-39">
+        {% for blog in latest_blogs %}
+          <div class="card">
+            {% if blog.image %}
+              <img src="{{ blog.image.url }}" alt="{{ blog.title }}" class="rectangle-9" />
+            {% else %}
+              <div class="rectangle-9"></div>
+            {% endif %}
+            <div class="source-april-07-2025">{{ blog.author }} | {{ blog.published_date|date:'F j, Y' }}</div>
+            <div class="headline-of-the-news" title="{{ blog.title }}">{{ blog.title }}</div>
+            <div class="frame-38">
+              <a href="{% url 'blog:blog_detail' blog.id %}" style="text-decoration: none;" class="read-more">Read More</a>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+    </section>
+
+    {% if question %}
+      <!-- MCQ Section -->
+      <section class="mcq-section py-5" style="margin: 60px auto; background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);">
+        <div class="container">
+          <div class="mcq-container">
+            <div class="text-center mb-4">
+              <h2 class="mcq-title">Test Your Knowledge</h2>
+              <p class="mcq-subtitle">Challenge yourself with our daily quiz</p>
+            </div>
+            <div class="mcq-question">
+              <div class="question-header">
+                <span class="question-badge">Question</span>
+                <h3 class="question-title">{{ question.question_text }}</h3>
+              </div>
+              <form id="mcq-form" class="options-container">
+                {% csrf_token %}
+                <input type="hidden" name="question_id" value="{{ question.id }}" />
+                {% for option in options %}
+                  <label class="option">
+                    <input type="radio" name="option" value="{{ option.id }}" class="option-input" required />
+                    <span class="option-circle"></span>
+                    <span class="option-text">{{ option.option_text }}</span>
+                  </label>
+                {% endfor %}
+                <div class="text-center mt-4">
+                  <button type="submit" class="btn btn-primary btn-lg"><i class="fas fa-check-circle me-2"></i>Submit Answer</button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Result Modal -->
+      <div class="modal fade" id="resultModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title">Your Result</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body text-center">
+              <div id="correct-answer" class="result-message correct d-none">
+                <i class="fas fa-check-circle fa-3x mb-3 text-success"></i>
+                <h4 class="mb-3">Correct! Well done!</h4>
+                <p class="text-muted">Keep up the good work!</p>
+              </div>
+              <div id="wrong-answer" class="result-message incorrect d-none">
+                <i class="fas fa-times-circle fa-3x mb-3 text-danger"></i>
+                <h4 class="mb-3">Not quite right</h4>
+                <p class="text-muted">
+                  The correct answer was: <span id="correct-option" class="fw-bold"></span>
+                </p>
+              </div>
+            </div>
+            <div class="modal-footer justify-content-center">
+              <button type="button" class="btn btn-secondary me-2" data-bs-dismiss="modal">Close</button>
+              <button type="button" class="btn btn-primary" id="try-another"><i class="fas fa-redo me-2"></i>Try Another Question</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    {% endif %}
+  </div>
+
+  <style>
+    /* Start of hero Section Styles*/
+    .hero {
+      display: flex;
+      justify-content: space-between;
+      padding: 40px;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+    
+    .right-video {
+      flex: 1;
+      width: 100%;
+      height: 100%;
+      position: relative;
+    }
+    
+    .frame-27 {
+      background: #ffffff;
+      border-radius: 24px;
+      border: 1px solid #000000;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-between;
+      flex-shrink: 0;
+      width: 453px; /* ⬅️ Keep fixed width on desktop as per your request */
+      height: 410px;
+      position: relative;
+    }
+    
+    .headlines-in-headphones-on {
+      color: #000000;
+      text-align: left;
+      font-family: 'Montserrat-Bold', sans-serif;
+      font-size: 40px;
+      line-height: 45px;
+      font-weight: 700;
+      align-self: stretch;
+    }
+    
+    .listen-to-the-news-that-matters {
+      color: #000000;
+      text-align: left;
+      font-family: 'Montserrat-SemiBold', sans-serif;
+      font-size: 20px;
+      line-height: 25px;
+      font-weight: 600;
+      align-self: stretch;
+    }
+    
+    .frame-26 {
+      background: #f5f5f5;
+      border-radius: 24px;
+      border: 1px solid #000000;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-between;
+      align-self: stretch;
+      flex-shrink: 0;
+      height: 172px;
+    }
+    
+    .frame-25 {
+      padding: 10px 20px;
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-between;
+      align-self: stretch;
+      flex-shrink: 0;
+    }
+    
+    .icons,
+    .icons2 {
+      flex-shrink: 0;
+      width: 36px;
+      height: 36px;
+      aspect-ratio: 1;
+    }
+    
+    .lets-listen-news {
+      color: #000000;
+      text-align: left;
+      font-family: 'Montserrat-SemiBold', sans-serif;
+      font-size: 28px;
+      line-height: 36px;
+      font-weight: 600;
+    }
+    
+    .rectangle-7 {
+      width: 100%;
+      max-width: 100%;
+      height: auto;
+      object-fit: cover;
+      border-radius: 12px;
+    }
+    
+    .left-panel {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .right-panel {
+      flex: 2;
+      display: flex;
+      align-items: center;
+      overflow: hidden;
+      position: relative;
+      background: white;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    }
+    
+    /* ✅ Responsive adjustments: hide video part on small screens */
+    @media (max-width: 768px) {
+      .hero {
+        flex-direction: column;
+        align-items: center;
+        padding: 20px;
+      }
+    
+      .right-panel {
+        display: none; /* ⬅️ Hide video panel on mobile */
+      }
+    
+      .frame-27 {
+        width: 100%; /* Make audio section full width on mobile */
+        height: auto;
+      }
+    
+      .headlines-in-headphones-on {
+        font-size: 32px;
+      }
+    
+      .lets-listen-news {
+        font-size: 24px;
+      }
+    }
+    
+    /* Start of Popular Category Section Styles */
+    .popular-category {
+      padding: 10px 40px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      align-items: center;
+      width: 100%;
+      box-sizing: border-box;
+    }
+    
+    .category a {
+      text-decoration: none;
+      color: inherit;
+    }
+    
+    .frame-36 {
+      background: #ffffff;
+      padding: 0 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 35px;
+      align-items: center;
+      width: 100%;
+      box-sizing: border-box;
+    }
+    
+    .popular-category2 {
+      color: #000000;
+      text-align: center;
+      font-family: 'AveriaSerifLibre-Bold', sans-serif;
+      font-size: 32px;
+      font-weight: 700;
+      width: 100%;
+    }
+    
+    .frame-35 {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr); /* ⬅️ 3 columns by default */
+      gap: 20px;
+      width: 100%;
+      box-sizing: border-box;
+      justify-items: center;
+    }
+    
+    .category-box {
+      display: flex;
+      flex-direction: column;
+      gap: 11px;
+      align-items: center;
+      width: 135px;
+    }
+    
+    .rectangle-8 {
+      width: 100%;
+      border-radius: 12px;
+      height: auto;
+      aspect-ratio: 4/3;
+      object-fit: cover;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      cursor: pointer;
+    }
+    
+    .rectangle-8:hover {
+      transform: scale(1.05);
+      box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+    }
+    
+    .category {
+      color: #000000;
+      text-align: center;
+      font-family: 'AveriaSerifLibre-Bold', sans-serif;
+      font-size: 24px;
+      font-weight: 700;
+      width: 100%;
+    }
+    
+    /* ✅ Responsive breakpoints */
+    @media (max-width: 1024px) {
+      .frame-35 {
+        grid-template-columns: repeat(2, 1fr); /* ⬅️ 2 columns on tablets */
+      }
+    }
+    
+    @media (max-width: 600px) {
+      .frame-35 {
+        grid-template-columns: 1fr; /* ⬅️ 1 column on mobile */
+      }
+    
+      .category-box {
+        width: 100%;
+        max-width: 300px; /* ⬅️ optional: keep a reasonable max size */
+      }
+    }
+    
+    /* Trending News Section Styles */
+    .frame-49,
+    .frame-49 * {
+      box-sizing: border-box;
+    }
+    
+    .frame-49 {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      align-items: center;
+      width: 100%;
+      padding: 20px 0;
+    }
+    
+    .frame-37 {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-between;
+      width: 90%;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    
+    .line-1,
+    .line-2 {
+      border: 1px solid black;
+      flex: 1;
+      height: 0;
+      margin: 0 10px;
+    }
+    
+    .trending-news {
+      color: #000000;
+      text-align: center;
+      font-family: 'AveriaSerifLibre-Bold', sans-serif;
+      font-size: 24px;
+      font-weight: 700;
+    }
+    
+    .frame-39 {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr); /* 4 cards on large screens */
+      gap: 20px;
+      width: 90%;
+      max-width: 1200px;
+      padding: 20px 0;
+      margin: 0 auto;
+    }
+    
+    /* Card styles */
+    .card {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      border: 1px solid #000000;
+      border-radius: 12px;
+      padding: 10px;
+      width: 100%;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      overflow: hidden;
+    }
+    
+    .card:hover {
+      transform: scale(1.03);
+      box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+    }
+    
+    .rectangle-9 {
+      background: #d9d9d9;
+      border-radius: 12px;
+      width: 100%;
+      height: 157px;
+      object-fit: cover;
+    }
+    
+    .source-april-07-2025 {
+      color: #000000;
+      text-align: left;
+      font-family: 'AveriaSerifLibre-Bold', sans-serif;
+      font-size: 14px;
+      font-weight: 700;
+    }
+    
+    .headline-of-the-news {
+      color: #000000;
+      text-align: left;
+      font-family: 'AveriaSerifLibre-Bold', sans-serif;
+      font-size: 16px;
+      font-weight: 700;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      width: 100%;
+    }
+    
+    .frame-38 {
+      background: #000000;
+      border-radius: 12px;
+      padding: 10px 20px;
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    
+    .read-more {
+      color: #ffffff;
+      text-align: center;
+      font-family: 'AveriaSerifLibre-Bold', sans-serif;
+      font-size: 16px;
+      font-weight: 700;
+      text-decoration: none;
+    }
+    
+    /* Responsive breakpoints */
+    @media (max-width: 1024px) {
+      .frame-39 {
+        grid-template-columns: repeat(2, 1fr); /* 2 cards on tablets */
+      }
+    }
+    
+    @media (max-width: 600px) {
+      .frame-39 {
+        grid-template-columns: 1fr; /* 1 card on mobile */
+      }
+    }
+    
+    /* Advertisement Section Styles */
+    .ad-section {
+      width: 100%;
+      padding: 0;
+    }
+    
+    .ad-content {
+      position: relative;
+      width: 100%;
+      padding-top: 20%;
+      overflow: hidden;
+      border-radius: 12px;
+    }
+    .ad-content img {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    
+    /* Floating button over the image */
+    .ad-content .btn {
+      position: absolute;
+      bottom: 20px;
+      right: 20px;
+      z-index: 2;
+      background-color: #ffffffdd;
+      color: #000;
+      padding: 12px 20px;
+      border-radius: 8px;
+      text-decoration: none;
+      font-weight: bold;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+      transition: background 0.3s ease;
+    }
+    
+    .ad-content .btn:hover {
+      background-color: #000;
+      color: #fff;
+    }
+    /* MCQ Section */
+    .mcq-section {
+      padding: 4rem 0;
+    }
+    
+    .mcq-container {
+      background: white;
+      border-radius: 16px;
+      padding: 2.5rem;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      max-width: 800px;
+      margin: 0 auto;
+    }
+    
+    .mcq-title {
+      color: #333;
+      font-size: 2.5rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+    }
+    
+    .mcq-subtitle {
+      color: #666;
+      font-size: 1.1rem;
+      margin-bottom: 2rem;
+    }
+    
+    .question-header {
+      background: #f8f9fa;
+      padding: 1.5rem;
+      border-radius: 12px;
+      margin-bottom: 2rem;
+    }
+    
+    .question-badge {
+      display: inline-block;
+      background: #007bff;
+      color: white;
+      padding: 0.25rem 1rem;
+      border-radius: 20px;
+      font-size: 0.9rem;
+      margin-bottom: 1rem;
+    }
+    
+    .question-title {
+      color: #333;
+      font-size: 1.4rem;
+      margin: 0;
+      line-height: 1.5;
+    }
+    
+    .options-container {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+    
+    .option {
+      display: flex;
+      align-items: center;
+      padding: 1rem 1.5rem;
+      border: 2px solid #e9ecef;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    
+    .option:hover {
+      background: #f8f9fa;
+      border-color: #007bff;
+    }
+    
+    .option-input {
+      display: none;
+    }
+    
+    .option-circle {
+      width: 24px;
+      height: 24px;
+      border: 2px solid #007bff;
+      border-radius: 50%;
+      margin-right: 1rem;
+      position: relative;
+      transition: all 0.3s ease;
+    }
+    
+    .option-input:checked + .option-circle::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 14px;
+      height: 14px;
+      background-color: #007bff;
+      border-radius: 50%;
+    }
+    
+    .option-text {
+      font-size: 1.1rem;
+      color: #333;
+    }
+    
+    .btn-primary {
+      padding: 0.75rem 2rem;
+      font-size: 1.1rem;
+      border-radius: 8px;
+      transition: all 0.3s ease;
+    }
+    
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(0, 123, 255, 0.2);
+    }
+    
+    /* Result Modal Styles */
+    .result-message {
+      padding: 2rem;
+    }
+    
+    .result-message.correct {
+      color: #28a745;
+    }
+    
+    .result-message.incorrect {
+      color: #dc3545;
+    }
+    
+    .modal-content {
+      border-radius: 16px;
+      border: none;
+    }
+    
+    .modal-header {
+      border-bottom: 1px solid #e9ecef;
+      padding: 1.5rem;
+    }
+    
+    .modal-body {
+      padding: 2rem;
+    }
+    
+    .modal-footer {
+      border-top: 1px solid #e9ecef;
+      padding: 1.5rem;
+    }
+    
+    @media (max-width: 768px) {
+      .mcq-container {
+        padding: 1.5rem;
+        margin: 0 1rem;
+      }
+    
+      .mcq-title {
+        font-size: 2rem;
+      }
+    
+      .question-title {
+        font-size: 1.2rem;
+      }
+    
+      .option {
+        padding: 0.75rem 1rem;
+      }
+    }
+    
+    .subscribe-section .container {
+      max-width: 800px;
+    }
+  </style>
+
+  <script>
+    document.getElementById('subscribeBtn').addEventListener('click', function () {
+      var subscribeModal = new bootstrap.Modal(document.getElementById('subscribeModal'))
+      subscribeModal.show()
+    })
+  </script>
+{% endblock %}
+
+{% block extra_js %}
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      const form = document.getElementById('mcq-form')
+      const resultModal = new bootstrap.Modal(document.getElementById('resultModal'))
+    
+      form.addEventListener('submit', function (e) {
+        e.preventDefault()
+    
+        const selectedOption = document.querySelector('input[name="option"]:checked')
+        if (!selectedOption) return
+    
+        const formData = new FormData()
+        formData.append('question_id', form.querySelector('input[name="question_id"]').value)
+        formData.append('option_id', selectedOption.value)
+        formData.append('wants_another', false)
+    
+        fetch('{% url "mcq:submit_response" %}', {
+          method: 'POST',
+          body: formData,
+          headers: {
+            'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
+          }
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            if (data.success) {
+              const correctAnswer = document.getElementById('correct-answer')
+              const wrongAnswer = document.getElementById('wrong-answer')
+              const correctOption = document.getElementById('correct-option')
+    
+              if (data.is_correct) {
+                correctAnswer.classList.remove('d-none')
+                wrongAnswer.classList.add('d-none')
+              } else {
+                correctAnswer.classList.add('d-none')
+                wrongAnswer.classList.remove('d-none')
+                correctOption.textContent = data.correct_option
+              }
+    
+              resultModal.show()
+            }
+          })
+      })
+    
+      document.getElementById('try-another').addEventListener('click', function () {
+        window.location.reload()
+      })
+    })
+  </script>
+{% endblock %}

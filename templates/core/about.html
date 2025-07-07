@@ -1,0 +1,628 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+  About | CMP4285 Innovation Project
+{% endblock %}
+
+{% block content %}
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <style>
+    body {
+      background: #f8fafc !important;
+    }
+    .main-about-bg {
+      background: #f8fafc;
+      border-radius: 24px;
+      padding: 40px 0;
+    }
+    .about-combined {
+      background: linear-gradient(135deg, #f7f7fa 70%, #f0f1f5 100%);
+      border-radius: 24px;
+      box-shadow: 0 4px 24px rgba(0, 0, 0, 0.06);
+      padding: 40px 32px;
+      margin-bottom: 40px;
+    }
+    .logo-img {
+      width: 120px;
+      height: 120px;
+      object-fit: cover;
+      border-radius: 16px;
+      background: #e0e0e0;
+      margin: 0 auto 24px auto;
+      display: block;
+    }
+    .team-photo {
+      width: 100px;
+      height: 100px;
+      object-fit: cover;
+      border-radius: 50%;
+      background: #e0e0e0;
+      margin-bottom: 10px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    }
+    .team-name {
+      font-weight: bold;
+      font-size: 1.1rem;
+      margin-bottom: 2px;
+    }
+    .video-container {
+      position: relative;
+      width: 100%;
+      max-width: 350px;
+      margin: 0 auto;
+    }
+    .video-player {
+      width: 100%;
+      border-radius: 16px;
+      background: #e0e0e0;
+    }
+    .play-overlay {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 2;
+    }
+    .play-btn {
+      background: rgba(0, 0, 0, 0.6);
+      border: none;
+      border-radius: 50%;
+      width: 56px;
+      height: 56px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      font-size: 2rem;
+      transition: background 0.2s;
+    }
+    .play-btn:hover {
+      background: #e53935;
+      color: #fff;
+    }
+    .community-section {
+      background: linear-gradient(135deg, #b71c1c 80%, #7f1010 100%);
+      color: #fff;
+      border-radius: 18px;
+      box-shadow: 0 4px 24px rgba(183, 28, 28, 0.18);
+      padding: 36px 24px;
+      margin-bottom: 32px;
+    }
+    .community-btn {
+      background: #fff;
+      color: #b71c1c;
+      border: none;
+      border-radius: 8px;
+      padding: 12px 28px;
+      margin: 8px 10px;
+      font-size: 1.1rem;
+      font-weight: 500;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+      transition: background 0.2s, color 0.2s, box-shadow 0.2s;
+    }
+    .community-btn:hover {
+      background: #7f1010;
+      color: #fff;
+      box-shadow: 0 4px 16px rgba(229, 57, 53, 0.18);
+    }
+    .about-list li {
+      margin-bottom: 8px;
+    }
+    .section-title {
+      font-size: 1.5rem;
+      font-weight: 600;
+      margin-top: 32px;
+      margin-bottom: 16px;
+    }
+    .about-hero {
+      background: linear-gradient(120deg, #23272f 60%, #b71c1c 100%);
+      color: #fff;
+      border-radius: 24px;
+      box-shadow: 0 4px 24px rgba(0, 0, 0, 0.1);
+      padding: 48px 32px 32px 32px;
+      margin-bottom: 40px;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .about-hero-content {
+      flex: 1 1 320px;
+      min-width: 260px;
+      margin-right: 32px;
+    }
+    .about-hero-title {
+      font-size: 2.5rem;
+      font-weight: 700;
+      margin-bottom: 18px;
+    }
+    .about-hero-desc {
+      font-size: 1.2rem;
+      margin-bottom: 24px;
+    }
+    .about-hero-btn {
+      background: #fff;
+      color: #b71c1c;
+      border: none;
+      border-radius: 8px;
+      padding: 14px 32px;
+      font-size: 1.1rem;
+      font-weight: 600;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+      transition: background 0.2s, color 0.2s, box-shadow 0.2s;
+      margin-right: 10px;
+    }
+    .about-hero-btn:hover {
+      background: #b71c1c;
+      color: #fff;
+      box-shadow: 0 4px 16px rgba(229, 57, 53, 0.18);
+    }
+    .about-hero-img {
+      flex: 1 1 340px;
+      min-width: 220px;
+      text-align: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .about-hero-img video {
+      width: 100%;
+      max-width: 100%;
+      min-width: 220px;
+      border-radius: 18px;
+      box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
+      background: #e0e0e0;
+      aspect-ratio: 16/9;
+      object-fit: cover;
+    }
+    .about-story {
+      background: #ececec;
+      border-radius: 18px;
+      box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
+      padding: 32px 24px;
+      margin-bottom: 32px;
+      font-size: 1.1rem;
+    }
+    .topic-section {
+      background: #ececec;
+      border-radius: 18px;
+      box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
+      padding: 32px 24px;
+      margin-bottom: 32px;
+      font-size: 1.1rem;
+    }
+    .topic-section h2 {
+      font-weight: 700;
+      margin-bottom: 24px;
+    }
+    .topic-content {
+      background: #fff;
+      border-radius: 16px;
+      padding: 24px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+    }
+    .topic-content p {
+      margin-bottom: 12px;
+      line-height: 1.6;
+    }
+    .topic-content ul {
+      margin: 0;
+      padding-left: 20px;
+    }
+    .topic-content ul li {
+      margin-bottom: 12px;
+      line-height: 1.5;
+    }
+    .topic-content ul li:last-child {
+      margin-bottom: 0;
+    }
+    .tech-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 16px;
+      margin-top: 16px;
+    }
+    .tech-item {
+      background: #fff;
+      padding: 16px;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+      transition: transform 0.2s;
+      border-left: 4px solid;
+    }
+    .tech-item:nth-child(1) {
+      border-left-color: #ff6b6b;
+    }
+    .tech-item:nth-child(2) {
+      border-left-color: #4ecdc4;
+    }
+    .tech-item:nth-child(3) {
+      border-left-color: #45b7d1;
+    }
+    .tech-item:nth-child(4) {
+      border-left-color: #96ceb4;
+    }
+    .tech-item:nth-child(5) {
+      border-left-color: #ffeead;
+    }
+    .tech-item:nth-child(6) {
+      border-left-color: #d4a5a5;
+    }
+    .tech-item:hover {
+      transform: translateY(-2px);
+    }
+    .tech-item strong {
+      color: #000;
+      display: block;
+      margin-bottom: 8px;
+      font-size: 1.1rem;
+    }
+    .team-section {
+      background: #f7f7fa;
+      border-radius: 18px;
+      box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
+      padding: 32px 24px;
+      margin-bottom: 32px;
+    }
+    .team-title {
+      font-size: 2rem;
+      font-weight: 700;
+      text-align: center;
+      margin-bottom: 32px;
+    }
+    .team-grid {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 32px 24px;
+    }
+    .team-member {
+      flex: 1 1 180px;
+      max-width: 220px;
+      text-align: center;
+      background: #fff;
+      border-radius: 16px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+      padding: 24px 12px 18px 12px;
+      margin-bottom: 12px;
+      position: relative;
+      border-right: 2px solid #000;
+      border-bottom: 2px solid #000;
+    }
+    .team-photo {
+      width: 90px;
+      height: 90px;
+      border-radius: 50%;
+      object-fit: cover;
+      background: #e0e0e0;
+      margin-bottom: 10px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    }
+    .team-name {
+      font-weight: bold;
+      font-size: 1.1rem;
+      margin-bottom: 2px;
+    }
+    .team-role {
+      color: #b71c1c;
+      font-size: 1rem;
+      font-weight: 500;
+      margin-bottom: 8px;
+    }
+    .team-desc {
+      font-size: 0.97rem;
+      color: #555;
+      margin-bottom: 10px;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      transition: all 0.3s ease;
+      position: relative;
+      min-height: 2.8em;
+      line-height: 1.4;
+    }
+    .team-desc.expanded {
+      -webkit-line-clamp: unset;
+    }
+    .see-more-btn {
+      color: #b71c1c;
+      cursor: pointer;
+      font-size: 0.9rem;
+      font-weight: 500;
+      display: inline-block;
+      margin-left: 5px;
+      background: #f7f7fa;
+      padding: 0 5px;
+    }
+    .team-desc.expanded + .see-more-btn {
+      display: block;
+      margin-top: 5px;
+      margin-left: 0;
+    }
+    .see-more-btn:hover {
+      text-decoration: underline;
+    }
+    .team-social {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+    }
+    .team-social a {
+      color: #23272f;
+      font-size: 1.2rem;
+      transition: color 0.2s, transform 0.2s;
+      display: inline-block;
+    }
+    .team-social a:hover {
+      color: #b71c1c;
+      transform: scale(1.2) rotate(-10deg);
+    }
+    /* MOBILE RESPONSIVE TWEAKS FOR .about-hero SECTION */
+    @media (max-width: 768px) {
+      .about-hero {
+        flex-direction: column;
+        padding: 28px 16px;
+        gap: 24px;
+        text-align: center;
+      }
+    
+      .about-hero-content {
+        margin: 0;
+        text-align: center;
+      }
+    
+      .about-hero-title {
+        font-size: 2rem;
+        line-height: 1.3;
+      }
+    
+      .about-hero-desc {
+        font-size: 1.05rem;
+        line-height: 1.6;
+        padding: 0 6px;
+      }
+    
+      .about-hero-btn {
+        display: inline-block;
+        width: auto;
+        margin: 8px 6px;
+        font-size: 1rem;
+        padding: 12px 24px;
+      }
+    
+      .about-hero-img {
+        width: 100%;
+        min-width: 0;
+        justify-content: center;
+      }
+    
+      .video-player {
+        width: 100%;
+        height: auto;
+        max-width: 100%;
+        aspect-ratio: 16 / 9;
+      }
+    }
+    
+    @media (max-width: 480px) {
+      .about-hero-title {
+        font-size: 1.6rem;
+      }
+    
+      .about-hero-desc {
+        font-size: 1rem;
+      }
+    
+      .about-hero-btn {
+        font-size: 0.95rem;
+        padding: 10px 20px;
+        width: 100%;
+      }
+    }
+  </style>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      setTimeout(function () {
+        var video = document.getElementById('aboutVideo')
+        if (video) {
+          video.play().catch(function (error) {
+            console.log('Video autoplay failed:', error)
+          })
+        }
+      }, 1500) // 1.5 seconds delay
+    
+      document.querySelectorAll('.see-more-btn').forEach((button) => {
+        button.addEventListener('click', function () {
+          const desc = this.previousElementSibling
+          desc.classList.toggle('expanded')
+          this.textContent = desc.classList.contains('expanded') ? 'See less...' : 'See more...'
+        })
+      })
+    })
+  </script>
+
+  <div class="container main-about-bg">
+    <!-- HERO SECTION -->
+    <div class="about-hero mb-4">
+      <div class="about-hero-content">
+        <div class="about-hero-title">Welcome to BulletNEWS</div>
+        <div class="about-hero-desc">Welcome to BulletNEWS, a platform designed to make news accessible and convenient. Our website transforms written news articles into audio format, allowing you to stay informed on the go. Whether you're commuting, multitasking, or prefer listening over reading, BulletNEWS ensures you never miss out on the latest updates. Experience news in a whole new way with BulletNEWS!</div>
+        <a href="#community" class="about-hero-btn" style="text-decoration: none;">Join Our Community</a>
+        <a href="[GitHub URL]" class="about-hero-btn" target="_blank" style="text-decoration: none;">View on GitHub</a>
+      </div>
+      <div class="about-hero-img">
+        <iframe class="video-player" width="100%" height="100%" src="https://www.youtube.com/embed/DThIS86lGAU?autoplay=1&mute=1&loop=1&playlist=DThIS86lGAU&modestbranding=1" title="Bullet News Intro" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen style="background:#e0e0e0; border-radius:18px; aspect-ratio:16/9; object-fit:cover;"></iframe>
+      </div>
+    </div>
+    <!-- TEAM SECTION -->
+    <div class="team-section">
+      <div class="team-title">Our Perfect Team</div>
+      <div class="team-grid">
+        <div class="team-member">
+          <img src="{% static 'images/team/bashantaaa.jpg' %}" alt="Member 1 Photo" class="team-photo" />
+          <div class="team-name">Basanta Tiwari</div>
+          <div class="team-role">Backend Developer</div>
+          <div class="description-container">
+            <div class="team-desc">I am a backend developer with a passion for creating efficient and scalable systems. I have a strong interest in cloud computing and database management.</div>
+            <div class="see-more-btn">See more...</div>
+          </div>
+          <div class="team-social">
+            <a href="https://www.facebook.com/bashanta.tiwari.655548" target="_blank"><i class="fab fa-facebook-f"></i></a>
+            <a href="#" target="_blank"><i class="fab fa-twitter"></i></a>
+            <a href="https://www.linkedin.com/in/bashantatiwari/" target="_blank"><i class="fab fa-linkedin-in"></i></a>
+          </div>
+        </div>
+        <div class="team-member">
+          <img src="{% static 'images/team/pyaspi.jpg' %}" alt="Member 2 Photo" class="team-photo" />
+          <div class="team-name">Pyaspi Rai</div>
+          <div class="team-role">Frontend Developer</div>
+          <div class="description-container">
+            <div class="team-desc">I am a frontend developer with a passion for creating user-friendly and responsive web applications.</div>
+            <div class="see-more-btn">See more...</div>
+          </div>
+          <div class="team-social">
+            <a href="https://www.facebook.com/pyaspi" target="_blank"><i class="fab fa-facebook-f"></i></a>
+            <a href="#" target="_blank"><i class="fab fa-twitter"></i></a>
+            <a href="https://www.linkedin.com/in/pyaspi-rai/" target="_blank"><i class="fab fa-linkedin-in"></i></a>
+          </div>
+        </div>
+        <div class="team-member">
+          <img src="{% static 'images/team/Shyam.jpg' %}" alt="Member 3 Photo" class="team-photo" />
+          <div class="team-name">Shyam Wagle</div>
+          <div class="team-role">Backend developer</div>
+          <div class="description-container">
+            <div class="team-desc">I am a authentication developer with a passion for creating secure and reliable authentication systems.</div>
+            <div class="see-more-btn">See more...</div>
+          </div>
+          <div class="team-social">
+            <a href="https://www.facebook.com/shyamsunder.wagle" target="_blank"><i class="fab fa-facebook-f"></i></a>
+            <a href="#" target="_blank"><i class="fab fa-twitter"></i></a>
+            <a href="https://www.linkedin.com/in/shyamsundarwagle/" target="_blank"><i class="fab fa-linkedin-in"></i></a>
+          </div>
+        </div>
+        <div class="team-member">
+          <img src="{% static 'images/team/krisha.jpg' %}" alt="Member 4 Photo" class="team-photo" />
+          <div class="team-name">Krisha Phuyal</div>
+          <div class="team-role">Frontend Developer</div>
+          <div class="description-container">
+            <div class="team-desc">I am a frontend developer with a passion for creating user-friendly and responsive web applications.</div>
+            <div class="see-more-btn">See more...</div>
+          </div>
+          <div class="team-social">
+            <a href="https://www.facebook.com/krisha.phuyal.1" target="_blank"><i class="fab fa-facebook-f"></i></a>
+            <a href="#" target="_blank"><i class="fab fa-twitter"></i></a>
+            <a href="https://www.linkedin.com/in/krisha-phuyal/" target="_blank"><i class="fab fa-linkedin-in"></i></a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- STORY SECTION -->
+    <div class="about-story">
+      <h2 class="mb-4" style="font-weight:700;">Our Story</h2>
+      <p class="mb-4">We are a team of four passionate students who came together with a shared goal: to bridge the information gap across Nepal by creating a smarter, more accessible way to consume news. Inspired by the fast-paced lives people lead today, we noticed a common problem—staying informed takes time that many don't have. That's when BulletNEWS was born.</p>
+    </div>
+
+    <!-- UN SDG GOALS SECTION -->
+    <div class="topic-section">
+      <h2 class="mb-4">UN SDG Goals</h2>
+      <div class="topic-content">
+        <ul>
+          <li>
+            <strong>Goal 4: Quality Education</strong> - Promoting inclusive and equitable quality education for all.
+          </li>
+          <li>
+            <strong>Goal 9: Industry, Innovation, and Infrastructure</strong> - Building resilient infrastructure and fostering innovation.
+          </li>
+          <li>
+            <strong>Goal 16: Peace, Justice, and Strong Institutions</strong> - Promoting peaceful and inclusive societies for sustainable development.
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- CHALLENGE SECTION -->
+    <div class="topic-section">
+      <h2 class="mb-4">Challenge</h2>
+      <div class="topic-content">
+        <p>In Nepal, it's difficult for people to keep up with local, regional, and national news due to scattered sources and time constraints. Long articles, slow websites, and lack of accessibility features often discourage regular news consumption.</p>
+      </div>
+    </div>
+
+    <!-- SOLUTION SECTION -->
+    <div class="topic-section">
+      <h2 class="mb-4">Solution</h2>
+      <div class="topic-content">
+        <p>BulletNEWS is a centralized news platform that pulls stories from across Nepal, categorizes them, and uses AI to generate short summaries. With built-in text-to-speech and speech-to-text features, it allows users to read or listen to the news in a format that suits them—perfect for busy individuals who still want to stay informed. It's fast, smart, and inclusive.</p>
+      </div>
+    </div>
+
+    <!-- TECHNOLOGIES SECTION -->
+    <div class="topic-section">
+      <h2 class="mb-4">Technologies Used</h2>
+      <div class="topic-content">
+        <div class="tech-grid">
+          <div class="tech-item">
+            <strong>Frontend</strong>
+            HTML, CSS, JavaScript
+          </div>
+          <div class="tech-item">
+            <strong>Backend</strong>
+            Django
+          </div>
+          <div class="tech-item">
+            <strong>Database</strong>
+            SQlite
+          </div>
+          <div class="tech-item">
+            <strong>AI/ML</strong>
+            HuggingFace Transformers, Gemini AI
+          </div>
+          <div class="tech-item">
+            <strong>Speech Features</strong>
+            gTTS
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- COMMUNITY SECTION -->
+    <div id="community" class="community-section text-center mt-5 mb-4">
+      <h3 class="mb-3">Join Our Community</h3>
+      <p class="mb-4">Stay updated with our latest news and progress. Subscribe to our newsletter or contact us for more information!</p>
+      <button id="subscribeBtn" class="community-btn me-2">Subscribe to Newsletter</button>
+      <a href="{% url 'contact' %}" class="community-btn">Contact Us</a>
+    </div>
+
+    <!-- Subscribe Modal -->
+    <div class="modal fade" id="subscribeModal" tabindex="-1" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Stay Updated</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body text-center">
+            <p class="mb-4">Subscribe to our newsletter for the latest news and updates</p>
+            <form method="post" action="{% url 'core:subscribe' %}" class="subscribe-form">
+              {% csrf_token %}
+              <div class="form-group d-flex gap-2">
+                <input type="email" name="email" class="form-control" placeholder="Enter your email" required />
+                <button type="submit" class="btn btn-primary">Subscribe</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      document.getElementById('subscribeBtn').addEventListener('click', function () {
+        var subscribeModal = new bootstrap.Modal(document.getElementById('subscribeModal'))
+        subscribeModal.show()
+      })
+    </script>
+  </div>
+{% endblock %}

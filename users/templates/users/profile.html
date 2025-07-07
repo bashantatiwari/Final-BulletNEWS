@@ -1,0 +1,74 @@
+{% extends 'base.html' %} {% block title %}
+  Profile - {{ user.username }}
+{% endblock %} {% block content %}
+  <style>
+    .btn-primary {
+      background-color: #000000 !important;
+      border-color: #000000 !important;
+      color: #ffffff !important;
+    }
+    .btn-primary:hover {
+      background-color: #333333 !important;
+      border-color: #333333 !important;
+    }
+    .card {
+      border-color: #000000 !important;
+    }
+    .card-header {
+      background-color: #000000 !important;
+      color: #ffffff !important;
+    }
+    strong {
+      color: #000000 !important;
+    }
+  </style>
+
+  <div class="container mt-5">
+    <div class="row">
+      <div class="col-md-8 offset-md-2">
+        <div class="card">
+          <div class="card-header">
+            <h2>Profile</h2>
+          </div>
+          <div class="card-body">
+            <div class="row mb-3">
+              <div class="col-md-4">
+                <strong>Username:</strong>
+              </div>
+              <div class="col-md-8">{{ user.username }}</div>
+            </div>
+            <div class="row mb-3">
+              <div class="col-md-4">
+                <strong>Full Name:</strong>
+              </div>
+              <div class="col-md-8">{{ user.full_name }}</div>
+            </div>
+            <div class="row mb-3">
+              <div class="col-md-4">
+                <strong>Email:</strong>
+              </div>
+              <div class="col-md-8">{{ user.email }}</div>
+            </div>
+            <div class="row mb-3">
+              <div class="col-md-4">
+                <strong>Country:</strong>
+              </div>
+              <div class="col-md-8">{{ user.country }}</div>
+            </div>
+            <div class="row mb-3">
+              <div class="col-md-4">
+                <strong>Gender:</strong>
+              </div>
+              <div class="col-md-8">{{ user.get_gender_display }}</div>
+            </div>
+            <div class="row">
+              <div class="col-12">
+                <a href="{% url 'users:settings' %}" class="btn btn-primary">Edit Profile</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}

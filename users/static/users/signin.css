@@ -1,0 +1,142 @@
+/* Base setup */
+body {
+  font-family: 'Inter', sans-serif;
+  background-color: #ffffff;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+/* Form container */
+.mainbar {
+  background-color: #f5f5f5;
+  padding: 40px 30px;
+  width: 500px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+}
+
+/* Input wrapper */
+.signinform-content {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  margin-bottom: 20px;
+}
+
+/* Each input block (label + input) */
+.signinform-userinput {
+  flex: 1;
+  min-width: 220px;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Label */
+.heading-third {
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+
+/* Input fields (use Django's default classes or override if needed) */
+input[type='text'],
+input[type='email'],
+input[type='password'],
+select {
+  padding: 10px 15px;
+  border: 1px solid #ccc;
+  border-radius: 25px;
+  font-size: 14px;
+  outline: none;
+  background-color: #fff;
+}
+
+/* Gender radio buttons or selects (if any custom style needed) */
+.signinform-content input[type='radio'] {
+  margin-right: 6px;
+}
+
+/* Submit button */
+.submit-btn {
+  width: 100%;
+  padding: 12px;
+  border: none;
+  background-color: black;
+  color: white;
+  border-radius: 6px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.2s ease-in-out;
+}
+
+.submit-btn:hover {
+  background-color: #ffffff;
+  color: black;
+  border: 2px solid black;
+  transition: background-color 0.2s ease-in-out;
+}
+
+/* Login redirect link */
+.login-link {
+  margin-top: 20px;
+  text-align: center;
+  font-size: 14px;
+  font-weight: bolder;
+}
+
+.login-link a {
+  color: black;
+  text-decoration: none;
+}
+/* Gender section */
+.userinput-gender {
+  flex-direction: column;
+  margin-bottom: 20px;
+  width: 100%;
+}
+
+/* Ensures form.gender covers full width */
+.userinput-gender .gender select,
+.userinput-gender .gender input[type='radio'] {
+  width: 100%;
+  padding: 10px 15px;
+  border-radius: 25px;
+  border: 1px solid #ccc;
+  font-size: 14px;
+}
+
+/* Optional: spacing between radio buttons (if radio is used) */
+.userinput-gender .gender label {
+  margin-right: 15px;
+}
+
+/* Responsive support */
+@media (max-width: 600px) {
+  .userinput-gender {
+    width: 100%;
+  }
+
+  .userinput-gender .gender select {
+    width: 100%;
+  }
+}
+
+.login-link a:hover {
+  text-decoration: underline;
+}
+
+/* Responsive tweaks */
+@media (max-width: 600px) {
+  .mainbar {
+    width: 90%;
+    padding: 30px 20px;
+  }
+
+  .signinform-userinput {
+    min-width: 100%;
+  }
+}

@@ -1,0 +1,130 @@
+{% extends 'base.html' %} {% block title %}Test Your Knowledge - BulletNEWS{%
+endblock %} {% block content %}
+<section class="mcq-section py-5">
+  <div class="container">
+    <div class="mcq-container">
+      <h2 class="mcq-title text-center mb-4">Test Your Knowledge</h2>
+      <div class="mcq-question">
+        <h3 class="question-title">{{ question.question_text }}</h3>
+        <form id="mcq-form" class="options-container">
+          {% csrf_token %}
+          <input type="hidden" name="question_id" value="{{ question.id }}" />
+          {% for option in options %}
+          <label class="option">
+            <input
+              type="radio"
+              name="option"
+              value="{{ option.id }}"
+              class="option-input"
+              required
+            />
+            <span class="option-circle"></span>
+            <span class="option-text">{{ option.option_text }}</span>
+          </label>
+          {% endfor %}
+          <div class="text-center mt-4">
+            <button type="submit" class="btn btn-primary">Submit Answer</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Result Modal -->
+<div class="modal fade" id="resultModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Your Result</h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <div id="correct-answer" class="alert alert-success d-none">
+          <i class="fas fa-check-circle me-2"></i>
+          <span>Correct! Well done!</span>
+        </div>
+        <div id="wrong-answer" class="alert alert-danger d-none">
+          <i class="fas fa-times-circle me-2"></i>
+          <span
+            >Incorrect. The correct answer was: <span id="correct-option"></span
+          ></span>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+          Close
+        </button>
+        <button type="button" class="btn btn-primary" id="try-another">
+          Try Another Question
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %} {% block extra_js %}
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const form = document.getElementById("mcq-form");
+    const resultModal = new bootstrap.Modal(
+      document.getElementById("resultModal")
+    );
+
+    form.addEventListener("submit", function (e) {
+      e.preventDefault();
+
+      const selectedOption = document.querySelector(
+        'input[name="option"]:checked'
+      );
+      if (!selectedOption) return;
+
+      const formData = new FormData();
+      formData.append(
+        "question_id",
+        form.querySelector('input[name="question_id"]').value
+      );
+      formData.append("option_id", selectedOption.value);
+      formData.append("wants_another", false);
+
+      fetch('{% url "mcq:submit_response" %}', {
+        method: "POST",
+        body: formData,
+        headers: {
+          "X-CSRFToken": document.querySelector("[name=csrfmiddlewaretoken]")
+            .value,
+        },
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          if (data.success) {
+            const correctAnswer = document.getElementById("correct-answer");
+            const wrongAnswer = document.getElementById("wrong-answer");
+            const correctOption = document.getElementById("correct-option");
+
+            if (data.is_correct) {
+              correctAnswer.classList.remove("d-none");
+              wrongAnswer.classList.add("d-none");
+            } else {
+              correctAnswer.classList.add("d-none");
+              wrongAnswer.classList.remove("d-none");
+              correctOption.textContent = data.correct_option;
+            }
+
+            resultModal.show();
+          }
+        });
+    });
+
+    document
+      .getElementById("try-another")
+      .addEventListener("click", function () {
+        window.location.reload();
+      });
+  });
+</script>
+{% endblock %}

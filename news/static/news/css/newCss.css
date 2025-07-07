@@ -1,0 +1,350 @@
+/* ================= Shared Layout Container ================= */
+.container {
+  max-width: 100%;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+}
+
+/* ================= Category Feed Layout Styles ================= */
+.category-container {
+  display: flex;
+  gap: 2rem;
+  width: 100%;
+  margin-bottom: 3rem;
+  background-color: #f9f9f9; /* Better contrast */
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.headlines-container {
+  flex: 1;
+  max-width: 60%;
+  max-height: 700px;
+  overflow-y: auto;
+  padding-right: 1rem;
+}
+
+.featured-container {
+  flex: 1;
+  max-width: 40%;
+  position: sticky;
+  top: 100px;
+  height: fit-content;
+}
+
+/* ================= Featured News Card Styles ================= */
+.featured-news-card {
+  background-color: var(--card-bg, #fff);
+  border-radius: var(--card-radius, 12px);
+  box-shadow: var(--box-shadow, 0 4px 12px rgba(0, 0, 0, 0.08));
+  overflow: hidden;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.3s ease;
+}
+
+.featured-news-card:hover {
+  transform: translateY(-5px);
+}
+
+.featured-image {
+  width: 100%;
+  height: 300px;
+  overflow: hidden;
+  position: relative;
+}
+
+.featured-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center top;
+  transition: transform 0.5s ease;
+}
+
+.featured-news-card:hover .featured-image img {
+  transform: scale(1.05);
+}
+
+.featured-content {
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+}
+
+.featured-details {
+  font-size: 0.9rem;
+  color: var(--light-text, #777);
+  margin-bottom: 0.75rem;
+}
+
+.featured-author {
+  font-weight: 500;
+}
+
+.featured-title {
+  font-size: 1.4rem;
+  margin-bottom: 1rem;
+  font-weight: 700;
+  color: var(--text-color, #222);
+  line-height: 1.3;
+}
+
+.featured-body {
+  color: var(--text-color, #444);
+  font-size: 1rem;
+  line-height: 1.6;
+  margin-bottom: 1.5rem;
+  flex-grow: 1;
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+.featured-body p {
+  margin-bottom: 1rem;
+}
+
+.featured-body img {
+  max-width: 100%;
+  height: auto;
+  margin: 1rem 0;
+  border-radius: 4px;
+}
+
+.featured-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: auto;
+  padding-top: 1rem;
+  border-top: 1px solid var(--border-color, #ddd);
+}
+
+.read-more-link {
+  display: inline-block;
+  padding: 0.5rem 1rem;
+  background-color: #000000;
+  color: white;
+  border-radius: 4px;
+  text-decoration: none;
+  font-weight: 500;
+  transition: background-color 0.3s ease;
+}
+
+.read-more-link:hover {
+  background-color: #000000;
+  text-decoration: none;
+}
+
+.empty-featured {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 300px;
+  background-color: var(--secondary-color, #eee);
+  color: var(--light-text, #777);
+}
+
+/* ================= Latest Headlines Layout ================= */
+.latest-headlines-section {
+  padding: 2rem 0;
+  margin: 0 120px;
+}
+
+.latest-container {
+  display: flex;
+  gap: 2rem;
+  width: 100%;
+  background-color: #fdfdfd;
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+}
+
+.latest-headlines-list {
+  flex: 2;
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+  max-height: 700px;
+  overflow-y: auto;
+  padding-right: 1rem;
+}
+
+.ads-container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  position: sticky;
+  top: 100px;
+  height: fit-content;
+}
+
+.ad-card {
+  background-color: #f4f4f4;
+  border-radius: 12px;
+  padding: 1rem;
+  text-align: center;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
+}
+
+.ad-card img {
+  width: 100%;
+  height: auto;
+  border-radius: 8px;
+}
+
+.action-btn {
+  margin-top: 0.8rem;
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  background-color: #222;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+}
+
+.action-btn a {
+  color: #fff;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.action-btn a:hover {
+  font-size: large;
+}
+
+/* ================= Headline Card Styles ================= */
+.headline-card {
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.headline-card.active {
+  border-left: 3px solid var(--primary-color, #1a73e8);
+  background-color: var(--secondary-color, #f0f0f0);
+  transform: translateY(-3px);
+}
+
+.headline-image {
+  flex: 0 0 120px;
+  height: 80px;
+  overflow: hidden;
+  border-radius: 4px;
+}
+
+.headline-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center top;
+}
+
+/* ================= Responsive Adjustments ================= */
+@media (max-width: 991.98px) {
+  .category-container,
+  .latest-container {
+    flex-direction: column;
+  }
+
+  .headlines-container,
+  .featured-container,
+  .latest-headlines-list,
+  .ads-container {
+    max-width: 100%;
+  }
+
+  .featured-container,
+  .ads-container {
+    position: static;
+    margin-top: 2rem;
+  }
+
+  .featured-image {
+    height: 250px;
+  }
+}
+
+@media (max-width: 767.98px) {
+  .featured-image {
+    height: 200px;
+  }
+
+  .featured-body {
+    max-height: 300px;
+  }
+}
+
+@media (min-height: 800px) {
+  .scrollable-content {
+    max-height: 800px;
+  }
+}
+
+/* ================= Animation ================= */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.category-feed-section,
+.latest-headlines-section {
+  animation: fadeIn 0.5s ease-out forwards;
+}
+
+.category-feed-section:nth-child(1) {
+  animation-delay: 0.1s;
+}
+.category-feed-section:nth-child(2) {
+  animation-delay: 0.2s;
+}
+.category-feed-section:nth-child(3) {
+  animation-delay: 0.3s;
+}
+.category-feed-section:nth-child(4) {
+  animation-delay: 0.4s;
+}
+.category-feed-section:nth-child(5) {
+  animation-delay: 0.5s;
+}
+.category-feed-section:nth-child(6) {
+  animation-delay: 0.6s;
+}
+/* ================= Mobile Optimization Enhancements ================= */
+@media (max-width: 767.98px) {
+  .featured-container {
+    display: none !important; /* 🔒 Hide on small screens */
+  }
+
+  .category-container,
+  .latest-container {
+    padding: 1rem;
+  }
+
+  .headline-image {
+    flex: 0 0 100px;
+    height: 70px;
+  }
+
+  .featured-title {
+    font-size: 1.1rem;
+  }
+
+  .featured-body {
+    font-size: 0.95rem;
+  }
+
+  .latest-headlines-section {
+    margin: 0 1rem;
+  }
+}

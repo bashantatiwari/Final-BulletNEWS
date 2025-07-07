@@ -1,0 +1,246 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+  Listen to News - BulletNEWS
+{% endblock %}
+
+{% block extra_css %}
+  <style>
+    .player-container {
+      max-width: 800px;
+      margin: 2rem auto;
+      padding: 2rem;
+      background: white;
+      border-radius: 15px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+    
+    .player-header {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+    
+    .player-title {
+      font-size: 1.8rem;
+      color: #2c3e50;
+      margin-bottom: 0.5rem;
+    }
+    
+    .player-subtitle {
+      color: #7f8c8d;
+      font-size: 1.1rem;
+    }
+    
+    .audio-player {
+      width: 100%;
+      margin: 2rem 0;
+    }
+    
+    .player-controls {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 1rem;
+      margin: 1rem 0;
+    }
+    
+    .control-button {
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-size: 1.5rem;
+      color: #2c3e50;
+      padding: 0.5rem;
+      border-radius: 50%;
+      transition: all 0.3s ease;
+    }
+    
+    .control-button:hover {
+      background: #f8f9fa;
+      transform: scale(1.1);
+    }
+    
+    .play-pause {
+      font-size: 2.5rem;
+    }
+    
+    .progress-container {
+      width: 100%;
+      background: #e9ecef;
+      height: 6px;
+      border-radius: 3px;
+      margin: 1rem 0;
+      cursor: pointer;
+      position: relative;
+    }
+    
+    .progress-bar {
+      background: #3498db;
+      height: 100%;
+      border-radius: 3px;
+      width: 0%;
+      transition: width 0.1s linear;
+    }
+    
+    .time-display {
+      display: flex;
+      justify-content: space-between;
+      color: #7f8c8d;
+      font-size: 0.9rem;
+      margin-top: 0.5rem;
+    }
+    
+    .volume-control {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-top: 1rem;
+    }
+    
+    .volume-slider {
+      width: 100px;
+      height: 4px;
+      -webkit-appearance: none;
+      background: #e9ecef;
+      border-radius: 2px;
+      outline: none;
+    }
+    
+    .volume-slider::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 12px;
+      height: 12px;
+      background: #3498db;
+      border-radius: 50%;
+      cursor: pointer;
+    }
+    
+    .back-button {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.5rem 1rem;
+      background: #3498db;
+      color: white;
+      text-decoration: none;
+      border-radius: 5px;
+      margin-top: 1rem;
+      transition: background 0.3s ease;
+    }
+    
+    .back-button:hover {
+      background: #2980b9;
+    }
+  </style>
+{% endblock %}
+
+{% block content %}
+  <div class="player-container">
+    <div class="player-header">
+      <h1 class="player-title">Listen to News</h1>
+      <p class="player-subtitle">{{ category|title }} Category</p>
+    </div>
+
+    <audio id="audio-player" class="audio-player" src="{{ audio_url }}" autoplay>Your browser does not support the audio element.</audio>
+
+    <div class="progress-container" id="progress-container">
+      <div class="progress-bar" id="progress-bar"></div>
+    </div>
+
+    <div class="time-display">
+      <span id="current-time">0:00</span>
+      <span id="duration">0:00</span>
+    </div>
+
+    <div class="player-controls">
+      <button class="control-button" id="rewind"><i class="fas fa-backward"></i></button>
+      <button class="control-button play-pause" id="play-pause"><i class="fas fa-pause"></i></button>
+      <button class="control-button" id="forward"><i class="fas fa-forward"></i></button>
+    </div>
+
+    <div class="volume-control">
+      <i class="fas fa-volume-up"></i>
+      <input type="range" class="volume-slider" id="volume" min="0" max="1" step="0.1" value="1" />
+    </div>
+
+    <a href="{% url 'newsfeed:myfeed' %}" class="back-button"><i class="fas fa-arrow-left"></i> Back to Feed</a>
+  </div>
+{% endblock %}
+
+{% block extra_js %}
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      const audio = document.getElementById('audio-player')
+      const playPauseBtn = document.getElementById('play-pause')
+      const rewindBtn = document.getElementById('rewind')
+      const forwardBtn = document.getElementById('forward')
+      const progressBar = document.getElementById('progress-bar')
+      const progressContainer = document.getElementById('progress-container')
+      const currentTimeDisplay = document.getElementById('current-time')
+      const durationDisplay = document.getElementById('duration')
+      const volumeSlider = document.getElementById('volume')
+    
+      // Play/Pause
+      playPauseBtn.addEventListener('click', () => {
+        if (audio.paused) {
+          audio.play()
+          playPauseBtn.innerHTML = '<i class="fas fa-pause"></i>'
+        } else {
+          audio.pause()
+          playPauseBtn.innerHTML = '<i class="fas fa-play"></i>'
+        }
+      })
+    
+      // Rewind 10 seconds
+      rewindBtn.addEventListener('click', () => {
+        audio.currentTime = Math.max(0, audio.currentTime - 10)
+      })
+    
+      // Forward 10 seconds
+      forwardBtn.addEventListener('click', () => {
+        audio.currentTime = Math.min(audio.duration, audio.currentTime + 10)
+      })
+    
+      // Update progress bar
+      audio.addEventListener('timeupdate', () => {
+        const progress = (audio.currentTime / audio.duration) * 100
+        progressBar.style.width = progress + '%'
+    
+        // Update time displays
+        currentTimeDisplay.textContent = formatTime(audio.currentTime)
+        durationDisplay.textContent = formatTime(audio.duration)
+      })
+    
+      // Click on progress bar to seek
+      progressContainer.addEventListener('click', (e) => {
+        const width = progressContainer.clientWidth
+        const clickX = e.offsetX
+        const duration = audio.duration
+        audio.currentTime = (clickX / width) * duration
+      })
+    
+      // Volume control
+      volumeSlider.addEventListener('input', (e) => {
+        audio.volume = e.target.value
+      })
+    
+      // Format time in MM:SS
+      function formatTime(seconds) {
+        const minutes = Math.floor(seconds / 60)
+        seconds = Math.floor(seconds % 60)
+        return `${minutes}:${seconds.toString().padStart(2, '0')}`
+      }
+    
+      // Update play/pause button when audio ends
+      audio.addEventListener('ended', () => {
+        playPauseBtn.innerHTML = '<i class="fas fa-play"></i>'
+      })
+    
+      // Update play/pause button when audio is loaded
+      audio.addEventListener('loadedmetadata', () => {
+        durationDisplay.textContent = formatTime(audio.duration)
+      })
+    })
+  </script>
+{% endblock %}

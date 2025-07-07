@@ -1,0 +1,118 @@
+{% extends 'base.html' %} {% load static %} {% load custom_tags %} {% block title %}
+  Blog - BulletNEWS
+{% endblock %} {% block extra_css %}
+  <link rel="stylesheet" href="{% static 'blog/blog.css' %}" />
+  <style>
+    .main-content {
+      padding-top: 0 !important;
+    }
+    
+    .load-more-wrapper {
+      text-align: center;
+      margin: 40px 0;
+    }
+    
+    #loadMore {
+      padding: 10px 20px;
+      font-size: 16px;
+      background-color: #000;
+      color: white;
+      border: 1px solid #000;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    
+    #loadMore:hover {
+      background-color: #fff;
+      color: #000;
+    }
+  </style>
+{% endblock %} {% block content %}
+  {% comment %} <div class="page-wrapper">
+    <!-- Featured Section -->
+    <div class="featured-section">
+      <div class="featured-content">
+        <span class="category"></span>
+        <h1 class="title"></h1>
+        <div class="meta">
+          <span class="author"></span>
+          <span class="date"></span>
+        </div>
+      </div>
+    </div> {% endcomment %}
+
+    <!-- Blog Grid -->
+    <div class="blog-grid" id="blogGrid">
+      {% for post in posts %}
+        <a href="{% url 'blog:blog_detail' post.id %}" class="blog-page-card {% if forloop.counter > 3 %}hidden-card{% endif %}">
+          <div class="card-image{% if not post.image %} placeholder{% endif %}"
+            style="{% if post.image %}
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              background-image: url('{{ post.image.url }}')
+
+
+
+
+
+
+
+
+
+            {% endif %}"></div>
+          <div class="card-body">
+            <span class="category">{{ post.categories }}</span>
+            <h2 class="title">{{ post.title }}</h2>
+            <div class="meta">
+              <span class="author">{{ post.author }}</span>
+              <span class="date">{{ post.published_date|date:'F j, Y' }}</span>
+            </div>
+          </div>
+        </a>
+      {% empty %}
+        <p>No blog posts found.</p>
+      {% endfor %}
+    </div>
+
+    <!-- Load More Button -->
+    {% if posts|length > 3 %}
+      <div class="load-more-wrapper">
+        <button id="loadMore">Load More</button>
+      </div>
+    {% endif %}
+  </div>
+{% endblock %} {% block extra_js %}
+  <script src="{% static 'blog/blog.js' %}"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      const loadMoreBtn = document.getElementById('loadMore')
+      const hiddenCards = document.querySelectorAll('.hidden-card')
+      let currentIndex = 0
+      const cardsPerLoad = 3
+    
+      if (loadMoreBtn) {
+        loadMoreBtn.addEventListener('click', function () {
+          const endIndex = Math.min(currentIndex + cardsPerLoad, hiddenCards.length)
+    
+          for (let i = currentIndex; i < endIndex; i++) {
+            hiddenCards[i].classList.remove('hidden-card')
+          }
+    
+          currentIndex = endIndex
+    
+          if (currentIndex >= hiddenCards.length) {
+            loadMoreBtn.style.display = 'none'
+          }
+        })
+      }
+    })
+  </script>
+{% endblock %}
