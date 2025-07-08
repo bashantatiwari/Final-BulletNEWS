@@ -3,29 +3,29 @@ import os
 from dotenv import load_dotenv
 import dj_database_url
 
+# Load environment variables from .env
 BASE_DIR = Path(__file__).resolve().parent.parent
+load_dotenv(os.path.join(BASE_DIR, '.env'))
 
-# Load environment variables from .env file (local only)
-env_path = os.path.join(BASE_DIR, '.env')
-load_dotenv(env_path)
+# SECURITY
+SECRET_KEY = os.getenv('DJANGO_SECRET_KEY', 'fallback-secret-key-for-dev')  # Added fallback for local
+DEBUG = os.getenv('DEBUG', 'False').lower() == 'true'
 
-# Secret settings
-SECRET_KEY = os.getenv('DJANGO_SECRET_KEY')
-DEBUG = os.getenv('DEBUG', 'False') == 'True'
-ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', 'bulletnews-onl9.onrender.com').split(',')
+# Allow localhosts during development
+ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', '127.0.0.1,localhost').split(',')
 
+# External API Keys (optional fallback for local testing)
+GEMINI_API_KEY = os.getenv('GEMINI_API_KEY', 'dummy-api-key')
+WEATHER_API_KEY = os.getenv('WEATHER_API_KEY', 'dummy-weather-key')
 
-# External API Keys
-GEMINI_API_KEY = os.getenv('GEMINI_API_KEY')
-WEATHER_API_KEY = os.getenv('WEATHER_API_KEY')
-
-if not GEMINI_API_KEY:
+# Raise error only in production
+if not DEBUG and not GEMINI_API_KEY:
     raise ValueError("GEMINI_API_KEY not found in environment variables.")
 
 # Custom User Model
 AUTH_USER_MODEL = 'users.CustomUser'
 
-# Social Auth Settings
+# Social Auth
 SOCIAL_AUTH_LOGIN_ERROR_URL = 'failure'
 LOGIN_URL = 'users:login'
 LOGIN_REDIRECT_URL = 'newsfeed:myfeed'
@@ -42,7 +42,7 @@ EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 CONTACT_RECEIVER_EMAIL = 'tiwarieshant033@gmail.com'
 
-# Application definition
+# Application Definition
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -50,19 +50,23 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
+    # Local Apps
     'users.apps.UsersConfig',
     'blog',
     'news',
     'core',
     'newsfeed',
-    'social_django',
     'ai_chat',
     'mcq',
+
+    # Third-party
+    'social_django',
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
-    'whitenoise.middleware.WhiteNoiseMiddleware',  # Enables static file serving on Render
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -81,6 +85,7 @@ TEMPLATES = [
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
+                'django.template.context_processors.debug',
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
@@ -93,37 +98,45 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'BulletNEWS.wsgi.application'
 
-# DATABASE SETUP
+# DATABASES — fallback to SQLite when DATABASE_URL is not provided
+default_db = os.getenv("DATABASE_URL", "sqlite:///db.sqlite3")
 DATABASES = {
-    'default': dj_database_url.config(
-        default=os.getenv('DATABASE_URL')  # ❗ You will add this in Render after deployment
+    'default': dj_database_url.parse(
+        default_db,
+        conn_max_age=600,
+        ssl_require=default_db.startswith("postgres") and not DEBUG
     )
 }
 
-# Password validators
+# Password Validation
 AUTH_PASSWORD_VALIDATORS = [
-    {'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',},
-    {'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator', 'OPTIONS': {'min_length': 8},},
-    {'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',},
-    {'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',},
+    {'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator'},
+    {'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator', 'OPTIONS': {'min_length': 8}},
+    {'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator'},
+    {'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator'},
 ]
 
+# Internationalization
 LANGUAGE_CODE = 'en-us'
 TIME_ZONE = 'UTC'
 USE_I18N = True
 USE_TZ = True
 
-# STATIC & MEDIA
+# Static Files
 STATIC_URL = '/static/'
-STATICFILES_DIRS = [BASE_DIR / "static"]
+STATICFILES_DIRS = [BASE_DIR / 'static']
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
+# Media Files
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
-# Create media subdirectories
-MEDIA_SUBDIRS = ['pdfs', 'audio']
-for subdir in MEDIA_SUBDIRS:
-    os.makedirs(os.path.join(MEDIA_ROOT, subdir), exist_ok=True)
+# Create media subfolders only in local dev
+if DEBUG:
+    MEDIA_SUBDIRS = ['pdfs', 'audio']
+    for subdir in MEDIA_SUBDIRS:
+        os.makedirs(os.path.join(MEDIA_ROOT, subdir), exist_ok=True)
 
+# Default Primary Key
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'

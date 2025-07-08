@@ -597,32 +597,5 @@
     </div>
 
     <!-- Subscribe Modal -->
-    <div class="modal fade" id="subscribeModal" tabindex="-1" aria-hidden="true">
-      <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title">Stay Updated</h5>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-          </div>
-          <div class="modal-body text-center">
-            <p class="mb-4">Subscribe to our newsletter for the latest news and updates</p>
-            <form method="post" action="{% url 'core:subscribe' %}" class="subscribe-form">
-              {% csrf_token %}
-              <div class="form-group d-flex gap-2">
-                <input type="email" name="email" class="form-control" placeholder="Enter your email" required />
-                <button type="submit" class="btn btn-primary">Subscribe</button>
-              </div>
-            </form>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <script>
-      document.getElementById('subscribeBtn').addEventListener('click', function () {
-        var subscribeModal = new bootstrap.Modal(document.getElementById('subscribeModal'))
-        subscribeModal.show()
-      })
-    </script>
   </div>
 {% endblock %}
