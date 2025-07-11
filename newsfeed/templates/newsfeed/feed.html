@@ -3,7 +3,7 @@
 {% load static %}
 
 {% block title %}
-  My Feed - BulletNEWS
+  My Feed | BulletNEWS
 {% endblock %}
 
 {% block extra_css %}
@@ -125,7 +125,7 @@
               <i class="fas fa-file-pdf"></i>
               <span>Read PDF</span>
             </button>
-            <a href="{% url 'newsfeed:audio_player' category %}" class="preview-option">
+            <a href="{% url 'newsfeed:audio_player' category %}" class="preview-option" style="text-decoration: none;">
               <i class="fas fa-headphones"></i>
               <span>Listen to News</span>
             </a>
