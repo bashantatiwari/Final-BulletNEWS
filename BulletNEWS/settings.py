@@ -14,6 +14,10 @@ DEBUG = os.getenv('DEBUG', 'False').lower() == 'true'
 # Allow localhosts during development
 ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', 'final-bulletnews.onrender.com').split(',')
 
+# ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
+
+
+
 # External API Keys (optional fallback for local testing)
 GEMINI_API_KEY = os.getenv('GEMINI_API_KEY', 'dummy-api-key')
 WEATHER_API_KEY = os.getenv('WEATHER_API_KEY', 'dummy-weather-key')
