@@ -8,17 +8,13 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 load_dotenv(os.path.join(BASE_DIR, '.env'))
 
 # SECURITY
-SECRET_KEY = os.getenv('DJANGO_SECRET_KEY', 'fallback-secret-key-for-dev')  # Added fallback for local
+SECRET_KEY = os.getenv('DJANGO_SECRET_KEY', 'fallback-secret-key-for-dev')
 DEBUG = os.getenv('DEBUG', 'False').lower() == 'true'
 
-# Allow localhosts during development
+# Hosts
 ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', 'final-bulletnews.onrender.com').split(',')
 
-# ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
-
-
-
-# External API Keys (optional fallback for local testing)
+# External API Keys (fallback for local testing)
 GEMINI_API_KEY = os.getenv('GEMINI_API_KEY', 'dummy-api-key')
 WEATHER_API_KEY = os.getenv('WEATHER_API_KEY', 'dummy-weather-key')
 
@@ -66,6 +62,8 @@ INSTALLED_APPS = [
 
     # Third-party
     'social_django',
+    'cloudinary',
+    'cloudinary_storage',
 ]
 
 MIDDLEWARE = [
@@ -132,12 +130,21 @@ STATICFILES_DIRS = [BASE_DIR / 'static']
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
-# Media Files
+# Cloudinary Media Storage Configuration
+CLOUDINARY_STORAGE = {
+    'CLOUD_NAME': os.getenv('CLOUDINARY_CLOUD_NAME'),
+    'API_KEY': os.getenv('CLOUDINARY_API_KEY'),
+    'API_SECRET': os.getenv('CLOUDINARY_API_SECRET'),
+}
+
+DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
+
+# Media URL (kept for admin preview and compatibility)
 MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 # Create media subfolders only in local dev
 if DEBUG:
+    MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
     MEDIA_SUBDIRS = ['pdfs', 'audio']
     for subdir in MEDIA_SUBDIRS:
         os.makedirs(os.path.join(MEDIA_ROOT, subdir), exist_ok=True)
