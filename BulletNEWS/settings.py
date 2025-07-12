@@ -13,6 +13,7 @@ DEBUG = os.getenv('DEBUG', 'False').lower() == 'true'
 
 # Hosts
 ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', 'final-bulletnews.onrender.com').split(',')
+# ALLOWED_HOSTS = ['127.0.0.1','LOCALHOST']
 
 # External API Keys (fallback for local testing)
 GEMINI_API_KEY = os.getenv('GEMINI_API_KEY', 'dummy-api-key')
@@ -151,3 +152,7 @@ if DEBUG:
 
 # Default Primary Key
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# print("DEBUG:", DEBUG)
+# print("Cloudinary CLOUD_NAME:", os.getenv('CLOUDINARY_CLOUD_NAME'))
+# print("Default file storage:", DEFAULT_FILE_STORAGE)
